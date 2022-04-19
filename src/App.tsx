@@ -3,10 +3,11 @@ import { Map } from './components/Map'
 import { InputSearch, CoordinateProps } from './components/InputSearch'
 import { Load } from './components/load'
 import * as S from "../src/styles/app"
+import { GlobalContext } from "./context/GlobalContext"
 
 const App = () => {
   const [dataAddress, setDataAddress] = React.useState<CoordinateProps[]>([])
-  
+  const { load } = React.useContext( GlobalContext )
   
   function getData(data: CoordinateProps[]){
     setDataAddress(data)
@@ -15,7 +16,7 @@ const App = () => {
   
   return (
     <S.Container>
-      <Load />
+      { load && <Load /> } 
       <InputSearch getCoordinates={getData} />
       <Map data={dataAddress} />
     </ S.Container>

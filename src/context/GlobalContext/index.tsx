@@ -9,11 +9,13 @@ interface IGlobalContextProps {
 
 
 export const GlobalContext = React.createContext<IGlobalContextProps>({} as IGlobalContextProps)
-const [load, setLoad] = React.useState(false)
 
-export const GlobalContextProvider = ()=>{
+export const GlobalContextProvider = ({children} : {children: React.ReactNode})=>{
+  const [load, setLoad] = React.useState(false)
 
   return <GlobalContext.Provider value={{
     load, setLoad
-  }}></GlobalContext.Provider>
+  }}>
+    {children}
+  </GlobalContext.Provider>
 }
