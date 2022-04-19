@@ -1,12 +1,20 @@
 import React from 'react'
 import { Map } from './components/Map'
-import { InputSearch } from './components/InputSearch'
+import { InputSearch, CoordinateProps } from './components/InputSearch'
 
 const App = () => {
+  const [dataAddress, setDataAddress] = React.useState<CoordinateProps[]>([])
+  
+  
+  function getData(data: CoordinateProps[]){
+    setDataAddress(data)
+  }
+
+ 
   return (
     <>
-      <InputSearch />
-      <Map />
+      <InputSearch getCoordinates={getData} />
+      <Map data={dataAddress} />
     </>
     )
   }

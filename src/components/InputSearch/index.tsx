@@ -20,14 +20,18 @@ type CepProps = {
 }
 
 
-type CoordinateProps = {
+export type CoordinateProps = {
   display_name: string,
   lat: string,
   lon: string
 }
 
+type InputSearchProps = {
+  getCoordinates: (data: CoordinateProps[])=> void
+}
 
-export const InputSearch = () => {
+
+export const InputSearch = ({getCoordinates} : InputSearchProps) => {
   const [inputValue, setInputValue] = React.useState('')
   const [address, setAddress] = React.useState<CepProps>({} as CepProps)
   const [erro, setErro] = React.useState(false)
@@ -38,7 +42,6 @@ export const InputSearch = () => {
     if(erro) setErro(false)
     setInputValue(cepFormated)
   }
-  
   
   
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
@@ -71,12 +74,12 @@ export const InputSearch = () => {
     }
     
     React.useEffect( ()=>{
-      console.log(coordinates)
+      getCoordinates(coordinates)
     }, [coordinates] )
     
     React.useEffect( ()=>{
-      console.log(address)
       if(address.localidade) getCoodinatesFromAddr()
+      setInputValue("")
     }, [address] )
     
     return (
