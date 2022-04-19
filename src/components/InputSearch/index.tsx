@@ -3,41 +3,37 @@ import * as S from "./styles"
 import {CgSearch} from "react-icons/cg"
 import { useCepValidation } from '../../hooks/useCepValidation'
 import { GET_ADDRESS } from '../../functions/GetAddress'
-import { GET_COORDINATES } from '../../functions/GetCoordinates'
 import { GlobalContext } from "../../context/GlobalContext"
 
 
-type CepProps = {
+type AddrProps = {
   "cep": string,
-  "logradouro": string,
-  "complemento": string,
-  "bairro": string,
-  "localidade": string,
-  "uf": string,
-  "ibge": string,
-  "gia": string,
-  "ddd": string,
-  "siafi": string
+  "state": string,
+  "city": string,
+  "neighborhood": string,
+  "street": string,
+  "service": string,
+  "location":{
+    "type": string,
+    "coordinates":{
+      "longitude": string,
+      "latitude": string
+    }
+  }
 }
 
-
-export type CoordinateProps = {
-  display_name: string,
-  lat: string,
-  lon: string
-}
 
 type InputSearchProps = {
-  getCoordinates: (data: CoordinateProps[])=> void
+  getCoordinates: (data: AddrProps[])=> void
 }
 
 
 export const InputSearch = ({getCoordinates} : InputSearchProps) => {
   
   const [inputValue, setInputValue] = React.useState('')
-  const [address, setAddress] = React.useState<CepProps>({} as CepProps)
+  const [address, setAddress] = React.useState<AddrProps>({} as AddrProps)
   const [erro, setErro] = React.useState(false)
-  const [coordinates, setCoordinates] = React.useState<CoordinateProps[]>([])
+  const [coordinates, setCoordinates] = React.useState<AddrProps[]>([])
   const { setLoad } = React.useContext(GlobalContext)
   
   function handleValue(e: React.FormEvent<HTMLInputElement>){
@@ -55,10 +51,25 @@ export const InputSearch = ({getCoordinates} : InputSearchProps) => {
       return
     }
     
-    setLoad(true)
-    const addr = await GET_ADDRESS(inputValue.split("-").join(""))
-    console.log(addr)
+    try {
+      setLoad(true)
+      const addr = await GET_ADDRESS(inputValue.split("-").join(""))
+      setAddress(addr)
+      setInputValue("")
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoad(false)
+    }
   }
+  
+  
+  React.useEffect( ()=>{
+
+    console.log(address)
+    console.log(address.cep)
+
+  }, [address] )
   
   
   return (
