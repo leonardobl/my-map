@@ -1,14 +1,12 @@
 import axios from "axios"
 
 
-export const GET_CEP = async (cep:string)=>{
-  
-
+export const GET_ADDRESS = async (cep:string)=>{
   try {
-    const {data} = await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
-    return data
-  } catch (error) {
-    console.log(error)
-  }
+    const {data} = await axios.get(`https://brasilapi.com.br/api/cep/v2/{${cep}}`)
+  return data
+} catch (error) {
+  console.log(error)
+}
 
 }

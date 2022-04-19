@@ -2,7 +2,7 @@ import React from 'react'
 import * as S from "./styles"
 import {CgSearch} from "react-icons/cg"
 import { useCepValidation } from '../../hooks/useCepValidation'
-import { GET_CEP } from '../../functions/GetAddress'
+import { GET_ADDRESS } from '../../functions/GetAddress'
 import { GET_COORDINATES } from '../../functions/GetCoordinates'
 import { GlobalContext } from "../../context/GlobalContext"
 
@@ -55,51 +55,11 @@ export const InputSearch = ({getCoordinates} : InputSearchProps) => {
       return
     }
     
-    try {
-      setLoad(true)
-      const addr = await GET_CEP(inputValue)
-      if(addr.erro) {
-        setLoad(false)
-        setErro(true)
-        setAddress(addr)
-        return
-      }
-      setAddress(addr)
-      setErro(false)
-    } catch (error) {
-      setLoad(false)
-      console.log(error)
-    }
-    
+    setLoad(true)
+    const addr = await GET_ADDRESS(inputValue.split("-").join(""))
+    console.log(addr)
   }
   
-  
-  async function getCoodinatesFromAddr(){
-    const addrFormated = address.logradouro?.trim().split(" ").join("+")
-    
-    try {
-      const result = await GET_COORDINATES(addrFormated)
-      const dataAddr: CoordinateProps = Object.assign({}, {lat: result[0].lat, lon: result[0].lon, display_name: result[0].display_name})
-      
-      if(coordinates.some( item => item.lat == dataAddr.lat && item.lon == dataAddr.lon )) return
-      
-      setCoordinates( (prevCoord) => [...prevCoord, dataAddr] )
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setLoad(false)
-    }
-    
-  }
-  
-  React.useEffect( ()=>{
-    getCoordinates(coordinates)
-  }, [coordinates] )
-  
-  React.useEffect( ()=>{
-    if(address.localidade) getCoodinatesFromAddr()
-    setInputValue("")
-  }, [address] )
   
   return (
     <S.Container onSubmit={handleSubmit} erro={ erro } >
