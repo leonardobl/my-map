@@ -10,7 +10,6 @@ type dataMapProps = {
 
 export const Map = ( {data} : dataMapProps) => {
   
-  const position: LatLngExpression = [-5.1860, -42.7849]
   const centralPosition : LatLngExpression = [-5.1860, -42.7849]
   
   return(
@@ -24,8 +23,6 @@ export const Map = ( {data} : dataMapProps) => {
       
       const coordinates: LatLngExpression = [Number(data.lat), Number(data.lon)]
       
-          console.log(coordinates)
-
       return (
         <Marker key={i} position={ coordinates }>
           <Popup>
