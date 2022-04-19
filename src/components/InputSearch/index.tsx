@@ -1,12 +1,12 @@
 import React from 'react'
 import * as S from "./styles"
-import {CgSearch} from "react-icons/cg"
+import { CgSearch } from "react-icons/cg"
 import { useCepValidation } from '../../hooks/useCepValidation'
 import { GET_ADDRESS } from '../../functions/GetAddress'
 import { GlobalContext } from "../../context/GlobalContext"
 
 
-type AddrProps = {
+export type AddrProps = {
   "cep": string,
   "state": string,
   "city": string,
@@ -33,7 +33,7 @@ export const InputSearch = ({getCoordinates} : InputSearchProps) => {
   const [inputValue, setInputValue] = React.useState('')
   const [address, setAddress] = React.useState<AddrProps>({} as AddrProps)
   const [erro, setErro] = React.useState(false)
-  const [coordinates, setCoordinates] = React.useState<AddrProps[]>([])
+  const [addresses, setAddresses] = React.useState<AddrProps[]>([])
   const { setLoad } = React.useContext(GlobalContext)
   
   function handleValue(e: React.FormEvent<HTMLInputElement>){
@@ -66,11 +66,17 @@ export const InputSearch = ({getCoordinates} : InputSearchProps) => {
   
   React.useEffect( ()=>{
 
-    console.log(address)
-    console.log(address.cep)
+    if( !address.cep || addresses.some( addr => addr.cep == address.cep ) ) return
+    setAddresses( prevAddr => [...prevAddr, address] )
 
   }, [address] )
   
+
+  React.useEffect( ()=>{
+    getCoordinates(addresses)
+  }, [addresses] )
+  
+
   
   return (
     <S.Container onSubmit={handleSubmit} erro={ erro } >

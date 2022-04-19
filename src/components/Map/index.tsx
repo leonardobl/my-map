@@ -2,10 +2,10 @@ import React from 'react'
 import { LatLngExpression } from 'leaflet'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import * as S from "./styles"
-import { CoordinateProps } from "../InputSearch"
+import { AddrProps } from "../InputSearch"
 
 type dataMapProps = {
-  data: CoordinateProps[]
+  data: AddrProps[]
 }
 
 export const Map = ( {data} : dataMapProps) => {
@@ -21,12 +21,12 @@ export const Map = ( {data} : dataMapProps) => {
     
         { data.map( (data, i) => {
       
-      const coordinates: LatLngExpression = [Number(data.lat), Number(data.lon)]
+      const coordinates: LatLngExpression = [Number(data.location.coordinates.latitude), Number(data.location.coordinates.longitude)]
       
       return (
         <Marker key={i} position={ coordinates }>
           <Popup>
-            {data.display_name}
+            {`${data.street}, ${data.cep}, ${data.city}-${data.state}`}
           </Popup>
         </Marker>
         )
