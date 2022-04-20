@@ -54,6 +54,13 @@ export const InputSearch = ({getCoordinates} : InputSearchProps) => {
     try {
       setLoad(true)
       const addr = await GET_ADDRESS(inputValue.split("-").join(""))
+
+      if(!addr?.cep) {
+        setErro(true)
+        setLoad(false)
+        return
+      }
+
       setAddress(addr)
       setInputValue("")
     } catch (error) {
@@ -66,7 +73,7 @@ export const InputSearch = ({getCoordinates} : InputSearchProps) => {
   
   React.useEffect( ()=>{
 
-    if( !address.cep || addresses.some( addr => addr.cep == address.cep ) ) return
+    if( !address?.cep || addresses.some( addr => addr.cep == address.cep ) ) return
     setAddresses( prevAddr => [...prevAddr, address] )
 
   }, [address] )
